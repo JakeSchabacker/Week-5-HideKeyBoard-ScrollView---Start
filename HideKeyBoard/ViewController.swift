@@ -23,6 +23,11 @@ class ViewController: UIViewController {
         //Add Below Code from "Code for Steps.txt". Read Comments
         
         //Create Alert
+        let alert = UIAlertView()
+        alert.title = "Alert"
+        alert.message = message
+        alert.addButtonWithTitle("OK")
+        alert.show()
         
     }
 // 2) Add touchesBegan function to catch screen tap and resign keyboard
@@ -30,7 +35,9 @@ class ViewController: UIViewController {
         //Add Below Code from "Code for Steps.txt". Read Comments
         
         //forces resign first responder and hides keyboard
-       
+       txtFirst.endEditing(true)
+        txtLast.endEditing(true)
+        txtEmail.endEditing(true)
 
         
     }
@@ -40,7 +47,10 @@ class ViewController: UIViewController {
         //Add Below Code from "Code for Steps.txt". Read Comments
         
         //forces resign first responder and hides keyboard
-      
+      txtFirst.endEditing(true)
+        txtLast.endEditing(true)
+        txtEmail.endEditing(true)
+        
 
        
     }
@@ -49,6 +59,7 @@ class ViewController: UIViewController {
     func textFieldShouldReturn(textField: UITextField!) -> Bool     {
          //Add Below Code from "Code for Steps.txt". Read Comments
         
+        textField.resignFirstResponder()
         return true;
     }
     
@@ -56,23 +67,35 @@ class ViewController: UIViewController {
     func textFieldDidBeginEditing(textField:UITextField){
          //Add Below Code from "Code for Steps.txt". Read Comments
        
+        var scrollPoint:CGPoint
+        scrollPoint = CGPointMake(0, textField.frame.origin.y)
+        ScrollView.setContentOffset(scrollPoint, animated:true)
        
     }
     
 // 6) Add textFieldDidEndEditing function. ScrollPoint when done editing UItextfied
     func textFieldDidEndEditing(textField:UITextField){
          //Add Below Code from "Code for Steps.txt". Read Comments
+        
+        ScrollView.setContentOffset(CGPointZero, animated: true)
+        
             }
     
 // 7) Add textViewDidBeginEditing function. ScrollPoint when entering UItextView
     func textViewDidBeginEditing(textField:UITextView){
          //Add Below Code from "Code for Steps.txt". Read Comments
         
+        var scrollPoint:CGPoint
+        scrollPoint = CGPointMake (0, textField.frame.origin.y)
+        ScrollView.setContentOffset(scrollPoint, animated: true)
+        
     }
     
 // 8) Add textViewDidEndEditing function. ScrollPoint when done ending UItextView
     func textViewDidEndEditing(textField:UITextView){
          //Add Below Code from "Code for Steps.txt". Read Comments
+        
+        ScrollView.setContentOffset(CGPointZero, animated: true)
         
     }
     
@@ -85,15 +108,16 @@ class ViewController: UIViewController {
         //Add Below Code. Read Comments
         
         //Looks for single or multiple taps
-        
+        let tap:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "DismissKeyboard")
         //Adds tap gesture to ScrollView which will call DismissKeyboard and hide keyboard
-       
+       ScrollView.addGestureRecognizer(tap)
         //gets ScreenSize of current device
+        let size: CGRect = UIScreen.mainScreen().bounds
         
         //Go to left  = 0 pixels, top = 50 pixels, width or device in pixels, height of device in pixels
-       
+       ScrollView.frame = CGRectMake(0, 50, size.width, size.height)
         //Set focus on txtFirst
-      
+      txtFirst.becomeFirstResponder()
         
     }
     
@@ -108,9 +132,10 @@ class ViewController: UIViewController {
          //Add Below Code from "Code for Steps.txt". Fulfill Each Comment With Code
         
         //Set ScrollPoint and Go to ZERO location (Top) of ScrollView - animated
-      
+        ScrollView.setContentOffset(CGPointZero, animated: true)
         
         //set txtFirst as firstresponder
+        txtFirst.becomeFirstResponder()
        
 
        
@@ -140,14 +165,48 @@ class ViewController: UIViewController {
         //Add Below Code from "Code for Steps.txt". Fulfill Each Comment With Code
        
         //hide keyboard
-       
+       DismissKeyboard()
         
         //validation that all fields are entered
+        if (txtFirst.text == "" || txtLast.text == "" || txtEmail.text == "")
+        {
+                //Call messagebox if any fields are empty
+                MsgBox("All fields required, please correct")
+            
+        }
+            else
+        {
         
-        
-     }
+                //Check if txtContacts (UItextview) is empty
+                if (txtContacts.text == "")
+                {
+                        //if empty then add text and newline
+                        txtContacts.text = "MyContacts \n"
+                }
+            //format text
+            
+            //existing contents of txtcontacts, new line, txtfirst, newline, txtlast, newline, txtemail, newline
+            txtContacts.text = "\(txtContacts.text!) \n\(txtFirst.text!) \n\(txtLast.text!) \n\(txtEmail.text!)\n"
+            //clear textboxes
+            txtFirst.text = ""
+            txtLast.text = ""
+            txtEmail.text = ""
+            //load scrollview
+            
+            //declare CGPoint scrollpoint
+            
+            var scrollPoint:CGPoint
+            
+            //x = from left, y = from top
+            //get  = 0, y = location of btnBack Y
+            scrollPoint = CGPointMake(0, btnBack.frame.origin.y)
+            
+            //set scrollpoint and go to animated
+            ScrollView.setContentOffset(scrollPoint, animated: true)
+        }
     
 
     
 }
 
+}
